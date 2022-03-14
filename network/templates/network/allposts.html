@@ -1,0 +1,86 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <input type="hidden" value="{{ request.user }}" id="username">
+    <h2>All Posts</h2>
+    {% for post in posts %}
+    {% if post.user == request.user %}
+    <div class="container">
+        <div class="posts">
+            user: <a href="{% url 'profile' post.user.id %}">{{ post.user }}</a> <br>post: {{ post.post }} <br>timestamp: {{ post.datetime }} <br>likes: {{post.likes}}
+            <br>
+            <button class="button">Edit</button> 
+        </div>
+        <div class="edit">
+            <textarea></textarea>
+            <button class="button" value="{{post.id}}">Edit</button>
+        </div>
+    </div>
+    {% else %}
+    <div class="showposts">
+        user: <a href="{% url 'profile' post.user.id %}">{{ post.user }}</a> <br>post: {{ post.post }} <br>timestamp: {{ post.datetime }} <br>likes: {{post.likes}}
+            <br>
+            {% if request.user.is_authenticated %}
+            {% if post in likedposts %}
+            <button class="button" value="{{post.id}}">DisLike</button>
+            {% else %}
+            <button class="button" value="{{post.id}}">Like</button>
+            {% endif %}
+            {% endif %}
+    </div>
+    
+    {% endif %}
+
+    
+    
+    
+    {% endfor %}
+
+
+
+
+
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if posts.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ posts.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+            </span>
+    
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}">next</a>
+                <a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    
+    <br>
+    <nav aria-label="Page navigation example">
+        
+        <ul class="pagination justify-content-center">
+                
+            {% if posts.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+          {% endif %}
+          <div style="padding-left: 10px; padding-top: 5px; padding-right: 10px;"> Page {{ posts.number }} of {{ posts.paginator.num_pages }}. </div>
+          {% if posts.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">last &raquo;</a></li>
+          
+          {% endif %}
+          
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

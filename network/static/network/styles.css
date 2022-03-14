@@ -1,0 +1,13 @@
+.post,
+.container,
+.showposts {
+  margin: 10px;
+  border-style: groove;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+textarea {
+  width: 100%;
+}
